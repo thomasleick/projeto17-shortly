@@ -22,30 +22,28 @@ export const generateTokens = (user) => {
     process.env.ACCESS_TOKEN_SECRET,
     { expiresIn: accessTokenExpiresIn }
   );
-  const refreshToken = sign(
-    { id: user.id },
-    process.env.REFRESH_TOKEN_SECRET,
-    { expiresIn: refreshTokenExpiresIn }
-  );
+  const refreshToken = sign({ id: user.id }, process.env.REFRESH_TOKEN_SECRET, {
+    expiresIn: refreshTokenExpiresIn,
+  });
   return { accessToken, refreshToken };
 };
 
 export const saveRefreshToken = async (userId, refreshToken) => {
-    const client = await pool.connect();
-    try {
-      const query = {
-        text: "UPDATE users SET refreshToken = $1 WHERE id = $2",
-        values: [refreshToken, userId],
-      };
-      await client.query(query);
-      return;
-    } catch (err) {
-      console.error("Error updating refresh token", err);
-      throw err;
-    } finally {
-      client.release();
-    }
-  };
+  const client = await pool.connect();
+  try {
+    const query = {
+      text: `UPDATE users SET "refreshToken" = $1 WHERE id = $2`,
+      values: [refreshToken, userId],
+    };
+    await client.query(query);
+    return;
+  } catch (err) {
+    console.error("Error updating refresh token", err);
+    throw err;
+  } finally {
+    client.release();
+  }
+};
 
 const generateAccessToken = (userInfo) => {
   return sign({ UserInfo: userInfo }, process.env.ACCESS_TOKEN_SECRET, {

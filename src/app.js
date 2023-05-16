@@ -3,11 +3,9 @@ import { urlencoded, json } from "express";
 import cors from "cors";
 import corsOptions from "./configs/corsOptions.js";
 import credentials from "./middlewares/credentials.js";
-import pool from "./configs/dbConn.js";
 
 // Import Routes
-import signin from "./routes/signin.js";
-import signup from "./routes/signup.js";
+import authRoute from "./routes/auth.js";
 
 const app = express();
 
@@ -31,8 +29,7 @@ app.get("/", (req, res) => {
 });
 
 // Routes
-app.use("/signin", signin);
-app.use("/signup", signup);
+app.use("/auth", authRoute);
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
