@@ -1,6 +1,9 @@
-import { Router } from 'express'
-const router = Router()
+import { Router } from "express";
+import { validateNewUser } from "../middlewares/validateAuth.js";
+import { postUser } from "../controllers/authController.js";
 
-router.post('/', )
+const router = Router();
 
-export default router
+router.post("/", validateNewUser, postUser);
+
+export default router;

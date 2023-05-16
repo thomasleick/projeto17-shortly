@@ -3,38 +3,49 @@ import bcrypt from "bcrypt";
 import pkg from "jsonwebtoken";
 const { sign, verify } = pkg;
 
-const refreshTokenExpiresIn = 24 * 60 * 60 * 1000; // one day
-const accessTokenExpiresIn = 10 * 1000; // 10 seconds
+export const refreshTokenExpiresIn = 24 * 60 * 60 * 1000; // one day
+export const accessTokenExpiresIn = 10 * 1000; // 10 seconds
 
-const comparePassword = async (password, hashedPassword) => {
+export const comparePassword = async (password, hashedPassword) => {
   return bcrypt.compare(password, hashedPassword);
 };
 
-const generateTokens = (user) => {
+export const generateTokens = (user) => {
   const accessToken = sign(
     {
       UserInfo: {
         name: user.name,
         email: user.email,
-        id: user._id,
+        id: user.id,
       },
     },
     process.env.ACCESS_TOKEN_SECRET,
     { expiresIn: accessTokenExpiresIn }
   );
   const refreshToken = sign(
-    { id: user._id },
+    { id: user.id },
     process.env.REFRESH_TOKEN_SECRET,
     { expiresIn: refreshTokenExpiresIn }
   );
   return { accessToken, refreshToken };
 };
 
-const saveRefreshToken = async (userId, refreshToken) => {
-  const user = await User.findById(userId).exec();
-  user.refreshToken = refreshToken;
-  return user.save();
-};
+export const saveRefreshToken = async (userId, refreshToken) => {
+    const client = await pool.connect();
+    try {
+      const query = {
+        text: "UPDATE users SET refreshToken = $1 WHERE id = $2",
+        values: [refreshToken, userId],
+      };
+      await client.query(query);
+      return;
+    } catch (err) {
+      console.error("Error updating refresh token", err);
+      throw err;
+    } finally {
+      client.release();
+    }
+  };
 
 const generateAccessToken = (userInfo) => {
   return sign({ UserInfo: userInfo }, process.env.ACCESS_TOKEN_SECRET, {
