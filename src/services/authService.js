@@ -72,15 +72,25 @@ const verifyRefreshToken = async (refreshToken) => {
   }
 };
 
-const deleteRefreshToken = async (refreshToken) => {
-  const foundUser = await User.findOne({ refreshToken }).exec();
+export const deleteRefreshToken = async (refreshToken) => {
+  const foundUser = await findUserByRefreshToken(refreshToken);
   if (!foundUser) {
     return false;
   }
-
-  foundUser.refreshToken = "";
-  await foundUser.save();
-  return true;
+  const client = await pool.connect();
+  try {
+    const query = {
+      text: `UPDATE users SET "refreshToken" = "" WHERE id = $1`,
+      values: [userId],
+    };
+    await client.query(query);
+    return true;
+  } catch (err) {
+    console.error("Error updating refresh token", err);
+    throw err;
+  } finally {
+    client.release();
+  }
 };
 const generatePassword = async (length) => {
   let result = "";
@@ -99,6 +109,22 @@ export const findUserByEmail = async (email) => {
     const result = await client.query("SELECT * FROM users WHERE email=$1", [
       email,
     ]);
+    return result.rows[0];
+  } catch (err) {
+    console.error("Error getting user", err);
+    throw err;
+  } finally {
+    client.release();
+  }
+};
+
+export const findUserByRefreshToken = async (refreshToken) => {
+  const client = await pool.connect();
+  try {
+    const result = await client.query(
+      `SELECT * FROM users WHERE "refreshToken"=$1`,
+      [refreshToken]
+    );
     return result.rows[0];
   } catch (err) {
     console.error("Error getting user", err);
