@@ -1,5 +1,7 @@
 import { Router } from "express";
 import verifyJWT from "../middlewares/verifyJWT.js";
+import { validateUrl } from "../middlewares/ValidateUrl.js";
+import { postShorten } from "../controllers/urlController.js";
 
 const router = Router();
 
@@ -10,7 +12,7 @@ router.get("/open/:shortUrl", );
 
 //router.use(verifyJWT);
 // Protected Routes
-router.post("/shorten", );
+router.post("/shorten", validateUrl, postShorten);
 router.delete(":id", )
 
 
