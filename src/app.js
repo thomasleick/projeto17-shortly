@@ -6,6 +6,9 @@ import credentials from "./middlewares/credentials.js";
 
 // Import Routes
 import authRoute from "./routes/auth.js";
+import urlsRoute from "./routes/urls.js";
+import usersRoute from "./routes/users.js";
+import rankingRoute from "./routes/ranking.js";
 
 const app = express();
 
@@ -30,6 +33,9 @@ app.get("/", (req, res) => {
 
 // Routes
 app.use("/auth", authRoute);
+app.use("/urls", urlsRoute);
+app.use("/users", usersRoute);
+app.use("/ranking", rankingRoute);
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
