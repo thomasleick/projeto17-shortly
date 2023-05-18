@@ -10,7 +10,7 @@ const router = Router();
 router.get("/:id", );
 router.get("/open/:shortUrl", );
 
-//router.use(verifyJWT);
+router.use(verifyJWT);
 // Protected Routes
 router.post("/shorten", validateUrl, postShorten);
 router.delete(":id", )

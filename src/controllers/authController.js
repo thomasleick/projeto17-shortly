@@ -50,14 +50,14 @@ export const handleLogin = async (req, res) => {
     } else {
       return res.sendStatus(401); //unauthorized
     }
-  } catch (err) {
-    return res.sendStatus(500);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 
 export const handleLogout = async (req, res) => {
   const cookies = req.cookies;
-  console.log(req.cookies);
   if (!cookies?.jwt) {
     return res.sendStatus(204); // no content
   }
@@ -78,10 +78,10 @@ export const handleRefreshToken = async (req, res) => {
   if (!cookies?.jwt) return res.sendStatus(401);
 
   const refreshToken = cookies.jwt;
-  
+
   const result = await verifyRefreshToken(refreshToken);
 
-  if (!result) return res.sendStatus(403);
+  if (!result) return res.status(403).json({ message: "refreshToken not found" });
   const { foundUser, accessToken } = result;
 
   res.json({
