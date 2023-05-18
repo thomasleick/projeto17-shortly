@@ -51,20 +51,20 @@ const generateAccessToken = (userInfo) => {
   });
 };
 
-const verifyRefreshToken = async (refreshToken) => {
-  const foundUser = await User.findOne({ refreshToken }).exec();
+export const verifyRefreshToken = async (refreshToken) => {
+  const foundUser = await findUserByRefreshToken(refreshToken);
   if (!foundUser) {
     return false;
   }
   try {
     const decoded = verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
-    if (foundUser._id.toString() !== decoded.id) {
+    if (foundUser.id !== decoded.id) {
       return false;
     }
     const accessToken = generateAccessToken({
       name: foundUser.name,
       email: foundUser.email,
-      id: foundUser._id,
+      id: foundUser.id,
     });
     return { foundUser, accessToken };
   } catch (error) {

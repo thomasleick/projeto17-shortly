@@ -6,6 +6,7 @@ import {
   saveRefreshToken,
   refreshTokenExpiresIn,
   deleteRefreshToken,
+  verifyRefreshToken,
 } from "../services/authService.js";
 
 export const postUser = async (req, res) => {
@@ -70,4 +71,22 @@ export const handleLogout = async (req, res) => {
 
   res.clearCookie("jwt"), { httpOnly: true, sameSite: "None", secure: true };
   res.sendStatus(204);
+};
+
+export const handleRefreshToken = async (req, res) => {
+  const cookies = req.cookies;
+  if (!cookies?.jwt) return res.sendStatus(401);
+
+  const refreshToken = cookies.jwt;
+  
+  const result = await verifyRefreshToken(refreshToken);
+
+  if (!result) return res.sendStatus(403);
+  const { foundUser, accessToken } = result;
+
+  res.json({
+    name: foundUser.name,
+    email: foundUser.email,
+    accessToken,
+  });
 };
