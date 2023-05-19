@@ -31,12 +31,12 @@ export const handleLogin = async (req, res) => {
     if (!foundUser) {
       return res.sendStatus(401); //unauthorized
     }
-    return res.sendStatus(502)
+    //return res.sendStatus(502)
     const match = await comparePassword(req.body.password, foundUser.password);
     if (match) {
       const { accessToken, refreshToken } = generateTokens(foundUser);
       await saveRefreshToken(foundUser.id, refreshToken);
-
+      return res.sendStatus(503)
       res.cookie("jwt", refreshToken, {
         httpOnly: true,
         secure: true,
