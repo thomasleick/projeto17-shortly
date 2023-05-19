@@ -36,14 +36,14 @@ export const handleLogin = async (req, res) => {
     if (match) {
       const { accessToken, refreshToken } = generateTokens(foundUser);
       await saveRefreshToken(foundUser.id, refreshToken);
-      return res.sendStatus(503)
+      //return res.sendStatus(503)
       res.cookie("jwt", refreshToken, {
         httpOnly: true,
         secure: true,
         sameSite: "None",
         maxAge: refreshTokenExpiresIn,
       });
-
+      return res.sendStatus(504)
       return res.json({
         name: foundUser.name,
         email: foundUser.email,
