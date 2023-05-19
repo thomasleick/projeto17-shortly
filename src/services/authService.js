@@ -81,7 +81,7 @@ export const deleteRefreshToken = async (refreshToken) => {
   try {
     const query = {
       text: `UPDATE users SET "refreshToken" = $1 WHERE id = $2`,
-      values: ['', foundUser.id],
+      values: ["", foundUser.id],
     };
     await client.query(query);
     return true;
@@ -91,16 +91,6 @@ export const deleteRefreshToken = async (refreshToken) => {
   } finally {
     client.release();
   }
-};
-const generatePassword = async (length) => {
-  let result = "";
-  const characters =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  const charactersLength = characters.length;
-  for (let i = 0; i < length; i++) {
-    result += characters.charAt(Math.floor(Math.random() * charactersLength));
-  }
-  return result;
 };
 
 export const findUserByEmail = async (email) => {

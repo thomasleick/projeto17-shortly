@@ -14,7 +14,6 @@ export const shortenUrl = async (userId, url) => {
       text: `INSERT INTO urls("shortUrl", url, "visitCount", "userId") VALUES($1, $2, $3, $4)`,
       values: [shortUrl, url, 0, userId],
     });
-
     return result;
   } catch (err) {
     console.error("Error inserting new user", err);
@@ -24,17 +23,26 @@ export const shortenUrl = async (userId, url) => {
   }
 };
 
-export const findUrlById = async (id) => {
+export const findUrlBy = async (param, id) => {
   const client = await pool.connect();
   try {
     const result = await client.query({
-      text: `SELECT id, "shortUrl", url FROM urls WHERE id = $1`,
+      text: `SELECT id, "shortUrl", url FROM urls WHERE "${param}" = $1`,
       values: [id],
     });
 
-    return result.rows[0];
+    const url = result.rows[0];
+
+    if (param === "shortUrl") {
+      await client.query({
+        text: `UPDATE urls SET "visitCount" = "visitCount" + 1 WHERE id = $1`,
+        values: [url.id],
+      });
+    }
+
+    return url;
   } catch (err) {
-    console.error("Error inserting new user", err);
+    console.error("Error selecting URL", err);
     throw err;
   } finally {
     client.release();
