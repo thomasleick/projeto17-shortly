@@ -1,4 +1,4 @@
-import { shortenUrl, findUrlBy } from "../services/urlService.js";
+import { shortenUrl, findUrlBy, deleteShortenWithId } from "../services/urlService.js";
 
 export const postShorten = async (req, res) => {
   try {
@@ -39,13 +39,15 @@ export const redirectTo = async (req, res) => {
 
 export const deleteShorten = async (req, res) => {
   try {
-    const urlData = await findUrlBy("id", req.params.id);
+    const urlData = await findUrlBy("id", req.params.id, true);
     if (!urlData) {
       return res.status(404).json({ message: "url not found" });
     }
-    if (urlData.userId !== res.locals.userInfo.id) {
+    if (urlData.userId !== res.locals.user.id) {
+      return res.sendStatus(401)
     }
-    return res.status(200).json(urlData);
+    await deleteShortenWithId(req.params.id)
+    return res.status(204).json({ message: "Url deleted" });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal server error" });

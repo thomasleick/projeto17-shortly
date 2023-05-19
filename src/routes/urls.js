@@ -21,6 +21,6 @@ router.get("/open/:shortUrl", validateNanoIdAsParams, redirectTo);
 router.use(verifyJWT);
 // Protected Routes
 router.post("/shorten", validateUrl, postShorten);
-router.delete(":id", validateIdAsParams, deleteShorten);
+router.delete("/:id", validateIdAsParams, deleteShorten);
 
 export default router;
