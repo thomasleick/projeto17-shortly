@@ -17,7 +17,7 @@ export const postUser = async (req, res) => {
         .status(409)
         .json({ message: "User already registered with this Email" });
     }
-    const user = await createUser(req.body);
+    await createUser(req.body);
     res.status(201).json({ message: "User created!" });
   } catch (error) {
     console.error(error);
@@ -26,24 +26,20 @@ export const postUser = async (req, res) => {
 };
 export const handleLogin = async (req, res) => {
   try {
-    //return res.sendStatus(501)
     const foundUser = await findUserByEmail(req.body.email.toLowerCase());
     if (!foundUser) {
       return res.sendStatus(401); //unauthorized
     }
-    //return res.sendStatus(502)
     const match = await comparePassword(req.body.password, foundUser.password);
     if (match) {
       const { accessToken, refreshToken } = generateTokens(foundUser);
       await saveRefreshToken(foundUser.id, refreshToken);
-      //return res.sendStatus(503)
       res.cookie("jwt", refreshToken, {
         httpOnly: true,
         secure: true,
         sameSite: "None",
         maxAge: refreshTokenExpiresIn,
       });
-      //return res.sendStatus(504)
       return res.json({
         name: foundUser.name,
         email: foundUser.email,
@@ -54,7 +50,7 @@ export const handleLogin = async (req, res) => {
     }
   } catch (error) {
     console.error(error);
-    res.status(505).json({ message: "Internal server error" });
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 
