@@ -43,7 +43,7 @@ export const handleLogin = async (req, res) => {
         sameSite: "None",
         maxAge: refreshTokenExpiresIn,
       });
-      return res.sendStatus(504)
+      //return res.sendStatus(504)
       return res.json({
         name: foundUser.name,
         email: foundUser.email,
@@ -54,7 +54,7 @@ export const handleLogin = async (req, res) => {
     }
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(505).json({ message: "Internal server error" });
   }
 };
 
