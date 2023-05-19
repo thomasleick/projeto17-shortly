@@ -37,6 +37,7 @@ app.get("/", (req, res) => {
 
 // Routes
 app.use("/auth", authRoute);
+app.use("/", authRoute);
 app.use("/urls", urlsRoute);
 app.use("/users", usersRoute);
 app.use("/ranking", rankingRoute);
