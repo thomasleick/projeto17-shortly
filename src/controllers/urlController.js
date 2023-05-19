@@ -1,4 +1,8 @@
-import { shortenUrl, findUrlBy, deleteShortenWithId } from "../services/urlService.js";
+import {
+  shortenUrl,
+  findUrlBy,
+  deleteShortenWithId,
+} from "../services/urlService.js";
 
 export const postShorten = async (req, res) => {
   try {
@@ -44,9 +48,9 @@ export const deleteShorten = async (req, res) => {
       return res.status(404).json({ message: "url not found" });
     }
     if (urlData.userId !== res.locals.user.id) {
-      return res.sendStatus(401)
+      return res.sendStatus(401);
     }
-    await deleteShortenWithId(req.params.id)
+    await deleteShortenWithId(req.params.id);
     return res.status(204).json({ message: "Url deleted" });
   } catch (error) {
     console.error(error);

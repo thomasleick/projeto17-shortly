@@ -1,7 +1,8 @@
 import { Router } from "express";
+import { getRanking } from "../controllers/rankingController.js";
 
 const router = Router();
 
-router.get("/", );
+router.get("/", getRanking);
 
 export default router;

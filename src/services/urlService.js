@@ -25,7 +25,7 @@ export const shortenUrl = async (userId, url) => {
 
 export const findUrlBy = async (param, id, allData) => {
   const client = await pool.connect();
-  const columns = allData ? "*" : `id, "shortUrl", url`
+  const columns = allData ? "*" : `id, "shortUrl", url`;
   try {
     const result = await client.query({
       text: `SELECT ${columns} FROM urls WHERE "${param}" = $1`,
@@ -51,17 +51,17 @@ export const findUrlBy = async (param, id, allData) => {
 };
 
 export const deleteShortenWithId = async (id) => {
-    const client = await pool.connect();
-    try {
-      const result = await client.query({
-        text: 'DELETE FROM urls WHERE id = $1',
-        values: [id],
-      });
-      return result;
-    } catch (err) {
-      console.error("Error deleting shortened URL", err);
-      throw err;
-    } finally {
-      client.release();
-    }
-  };
+  const client = await pool.connect();
+  try {
+    const result = await client.query({
+      text: "DELETE FROM urls WHERE id = $1",
+      values: [id],
+    });
+    return result;
+  } catch (err) {
+    console.error("Error deleting shortened URL", err);
+    throw err;
+  } finally {
+    client.release();
+  }
+};
