@@ -7,8 +7,8 @@ export const buildRanking = async () => {
       `SELECT
         users.id,
         users.name,
-        COUNT(urls.id) AS linksCount,
-        COALESCE(SUM(urls."visitCount"), 0) AS visitCount
+        COUNT(urls.id) AS "linksCount",
+        COALESCE(SUM(urls."visitCount"), 0) AS "visitCount"
     FROM
         users
     LEFT JOIN
@@ -16,7 +16,7 @@ export const buildRanking = async () => {
     GROUP BY
         users.id
     ORDER BY
-        visitCount DESC
+        "visitCount" DESC
     LIMIT
         10;`
     );
