@@ -21,7 +21,7 @@ export const postUser = async (req, res) => {
     res.status(201).json({ message: "User created!" });
   } catch (error) {
     console.error(error);
-    res.status(501).json({ message: "Internal server error" });
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 export const handleLogin = async (req, res) => {
@@ -52,7 +52,7 @@ export const handleLogin = async (req, res) => {
     }
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(501).json({ message: "Internal server error" });
   }
 };
 
