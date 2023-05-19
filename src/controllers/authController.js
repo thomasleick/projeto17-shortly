@@ -26,11 +26,12 @@ export const postUser = async (req, res) => {
 };
 export const handleLogin = async (req, res) => {
   try {
-    return res.sendStatus(501)
+    //return res.sendStatus(501)
     const foundUser = await findUserByEmail(req.body.email.toLowerCase());
     if (!foundUser) {
       return res.sendStatus(401); //unauthorized
     }
+    return res.sendStatus(502)
     const match = await comparePassword(req.body.password, foundUser.password);
     if (match) {
       const { accessToken, refreshToken } = generateTokens(foundUser);
