@@ -21,14 +21,14 @@ export const postUser = async (req, res) => {
     res.status(201).json({ message: "User created!" });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(501).json({ message: "Internal server error" });
   }
 };
 export const handleLogin = async (req, res) => {
   try {
     const foundUser = await findUserByEmail(req.body.email.toLowerCase());
     if (!foundUser) {
-      return res.sendStatus(404); //unauthorized
+      return res.sendStatus(401); //unauthorized
     }
     const match = await comparePassword(req.body.password, foundUser.password);
     if (match) {
