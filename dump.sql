@@ -23,6 +23,9 @@ SET default_table_access_method = heap;
 --
 -- Name: urls; Type: TABLE; Schema: public; Owner: -
 --
+CREATE USER shortlydbuser WITH PASSWORD 'senha_ultra_secreta_do_usuario_shortlydbuser';
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO shortlydbuser;
+GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO shortlydbuser;
 
 CREATE TABLE public.urls (
     id integer NOT NULL,
