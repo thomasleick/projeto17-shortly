@@ -26,6 +26,7 @@ export const postUser = async (req, res) => {
 };
 export const handleLogin = async (req, res) => {
   try {
+    return res.sendStatus(501)
     const foundUser = await findUserByEmail(req.body.email.toLowerCase());
     if (!foundUser) {
       return res.sendStatus(401); //unauthorized
@@ -52,7 +53,7 @@ export const handleLogin = async (req, res) => {
     }
   } catch (error) {
     console.error(error);
-    res.status(501).json({ message: "Internal server error" });
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 
