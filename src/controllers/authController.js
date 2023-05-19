@@ -11,7 +11,7 @@ import {
 
 export const postUser = async (req, res) => {
   try {
-    const foundUser = await findUserByEmail(req.body.email);
+    const foundUser = await findUserByEmail(req.body.email.toLowerCase());
     if (foundUser) {
       return res
         .status(409)
@@ -26,7 +26,7 @@ export const postUser = async (req, res) => {
 };
 export const handleLogin = async (req, res) => {
   try {
-    const foundUser = await findUserByEmail(req.body.email);
+    const foundUser = await findUserByEmail(req.body.email.toLowerCase());
     if (!foundUser) {
       return res.sendStatus(404); //unauthorized
     }

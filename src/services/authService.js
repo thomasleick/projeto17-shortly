@@ -132,7 +132,7 @@ export const createUser = async (userData) => {
   try {
     const result = await client.query({
       text: "INSERT INTO users(name, email, password) VALUES($1, $2, $3)",
-      values: [name, email, hashedPassword],
+      values: [name, email.toLowerCase(), hashedPassword],
     });
 
     return result;
