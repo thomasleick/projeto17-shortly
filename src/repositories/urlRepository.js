@@ -1,13 +1,4 @@
-import { nanoid } from "nanoid";
-import pool from "../configs/dbConn.js";
-
-function generateRandomId(length) {
-  return nanoid(length);
-}
-
-export const createUrl = async (userId, url) => {
-  const shortUrl = generateRandomId(6);
-
+export const createUrl = async (userId, url, shortUrl) => {
   const client = await pool.connect();
   try {
     const result = await client.query({
@@ -17,15 +8,14 @@ export const createUrl = async (userId, url) => {
     return result;
   } catch (err) {
     console.error("Error inserting new URL", err);
-    throw err;
+    throw new Error("Failed to create URL");
   } finally {
     client.release();
   }
 };
 
-export const findUrlBy = async (param, id, allData) => {
+export const findUrlBy = async (param, id, columns) => {
   const client = await pool.connect();
-  const columns = allData ? "*" : `id, "shortUrl", url`;
   try {
     const result = await client.query({
       text: `SELECT ${columns} FROM urls WHERE "${param}" = $1`,
@@ -34,14 +24,10 @@ export const findUrlBy = async (param, id, allData) => {
 
     const url = result.rows[0];
 
-    if (param === "shortUrl") {
-      await incrementVisitCount(client, url.id);
-    }
-
     return url;
   } catch (err) {
     console.error("Error selecting URL", err);
-    throw err;
+    throw new Error("Failed to find URL");
   } finally {
     client.release();
   }
@@ -57,13 +43,14 @@ export const deleteUrlById = async (id) => {
     return result;
   } catch (err) {
     console.error("Error deleting URL", err);
-    throw err;
+    throw new Error("Failed to delete URL");
   } finally {
     client.release();
   }
 };
 
-async function incrementVisitCount(client, id) {
+export const incrementVisitCount = async (id) => {
+  const client = await pool.connect();
   try {
     await client.query({
       text: `UPDATE urls SET "visitCount" = "visitCount" + 1 WHERE id = $1`,
@@ -71,6 +58,8 @@ async function incrementVisitCount(client, id) {
     });
   } catch (err) {
     console.error("Error incrementing visit count", err);
-    throw err;
+    throw new Error("Failed to increment visit count");
+  } finally {
+    client.release();
   }
-}
+};
