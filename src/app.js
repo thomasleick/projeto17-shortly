@@ -3,7 +3,7 @@ import { urlencoded, json } from "express";
 import cors from "cors";
 import corsOptions from "./configs/corsOptions.js";
 import credentials from "./middlewares/credentials.js";
-import cookieParser from "cookie-parser"
+import cookieParser from "cookie-parser";
 
 // Import Routes
 import authRoute from "./routes/auth.js";
@@ -27,7 +27,7 @@ app.use(urlencoded({ extended: false }));
 app.use(json());
 
 // middleware for cookies
-app.use(cookieParser())
+app.use(cookieParser());
 
 const PORT = process.env.PORT || 5000;
 

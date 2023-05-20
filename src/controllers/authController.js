@@ -79,7 +79,8 @@ export const handleRefreshToken = async (req, res) => {
 
   const result = await verifyRefreshToken(refreshToken);
 
-  if (!result) return res.status(403).json({ message: "refreshToken not found" });
+  if (!result)
+    return res.status(403).json({ message: "refreshToken not found" });
   const { foundUser, accessToken } = result;
 
   res.json({
