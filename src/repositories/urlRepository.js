@@ -1,3 +1,5 @@
+import pool from "../configs/dbConn.js";
+
 export const createUrl = async (userId, url, shortUrl) => {
   const client = await pool.connect();
   try {

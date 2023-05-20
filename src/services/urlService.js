@@ -13,7 +13,7 @@ export const shortenUrl = async (userId, url) => {
 export const findUrlBy = async (param, id, allData) => {
   const columns = allData ? "*" : `id, "shortUrl", url`;
   const foundUrl = await urlRepository.findUrlBy(param, id, columns);
-  
+
   if (param === "shortUrl") {
     await urlRepository.incrementVisitCount(foundUrl.id);
   }
