@@ -37,8 +37,6 @@ export const handleLogin = async (req, res) => {
       if (req?.cookies?.jwt) {
         res.clearCookie("jwt", { httpOnly: true });
       }
-      console.log("Login")
-      console.log(refreshToken)
       res.cookie("jwt", refreshToken, {
         httpOnly: true,
         secure: true,
@@ -61,13 +59,10 @@ export const handleLogin = async (req, res) => {
 
 export const handleLogout = async (req, res) => {
   const cookies = req.cookies;
-  console.log(cookies)
   if (!cookies?.jwt) {
     return res.sendStatus(204); // no content
   }
   const refreshToken = cookies.jwt;
-  console.log("Logout")
-  console.log(refreshToken)
   const deleted = await deleteRefreshToken(refreshToken);
 
   if (!deleted) {

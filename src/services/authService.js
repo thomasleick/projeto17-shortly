@@ -60,9 +60,7 @@ export const verifyRefreshToken = async (refreshToken) => {
 };
 
 export const deleteRefreshToken = async (refreshToken) => {
-  console.log(verify(refreshToken, process.env.REFRESH_TOKEN_SECRET))
   const foundUser = await authRepository.findUserByRefreshToken(refreshToken);
-  console.debug(foundUser)
   if (!foundUser) {
     return false;
   }
