@@ -28,8 +28,8 @@ export const generateTokens = (user) => {
   return { accessToken, refreshToken };
 };
 
-export const saveRefreshToken = async (id) => {
-  return authRepository.saveRefreshToken(id);
+export const saveRefreshToken = async (id, refreshToken) => {
+  return authRepository.saveRefreshToken(id, refreshToken);
 };
 
 const generateAccessToken = (userInfo) => {
@@ -60,7 +60,9 @@ export const verifyRefreshToken = async (refreshToken) => {
 };
 
 export const deleteRefreshToken = async (refreshToken) => {
+  console.log(verify(refreshToken, process.env.REFRESH_TOKEN_SECRET))
   const foundUser = await authRepository.findUserByRefreshToken(refreshToken);
+  console.debug(foundUser)
   if (!foundUser) {
     return false;
   }
