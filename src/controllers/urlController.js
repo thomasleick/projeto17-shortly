@@ -33,8 +33,8 @@ export const redirectTo = async (req, res) => {
     if (!urlData) {
       return res.status(404).json({ message: "url not found" });
     }
-    //return res.redirect(urlData.url)
-    return res.sendStatus(200);
+    return res.redirect(urlData.url) //comment this line after hub
+    //return res.sendStatus(200); Change back to this line
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal server error" });
