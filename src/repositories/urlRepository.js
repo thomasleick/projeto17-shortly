@@ -4,10 +4,10 @@ export const createUrl = async (userId, url, shortUrl) => {
   const client = await pool.connect();
   try {
     const result = await client.query({
-      text: `INSERT INTO urls("shortUrl", url, "visitCount", "userId") VALUES($1, $2, $3, $4)`,
+      text: `INSERT INTO urls("shortUrl", url, "visitCount", "userId") VALUES($1, $2, $3, $4) RETURNING *`,
       values: [shortUrl, url, 0, userId],
     });
-    return result;
+    return result.rows[0];
   } catch (err) {
     console.error("Error inserting new URL", err);
     throw new Error("Failed to create URL");
