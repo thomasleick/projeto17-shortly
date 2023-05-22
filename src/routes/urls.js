@@ -1,6 +1,7 @@
 import { Router } from "express";
 import verifyJWT from "../middlewares/verifyJWT.js";
-import { validateUrl } from "../middlewares/ValidateUrl.js";
+import { schemaValidator } from "../middlewares/schemaValidator.js";
+import urlSchema from "../schemas/urlSchema.js";
 import {
   postShorten,
   getUrl,
@@ -20,7 +21,7 @@ router.get("/open/:shortUrl", validateNanoIdAsParams, redirectTo);
 
 router.use(verifyJWT);
 // Protected Routes
-router.post("/shorten", validateUrl, postShorten);
+router.post("/shorten", schemaValidator(urlSchema), postShorten);
 router.delete("/:id", validateIdAsParams, deleteShorten);
 
 export default router;

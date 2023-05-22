@@ -1,5 +1,7 @@
 import { Router } from "express";
-import { validateLogin, validateNewUser } from "../middlewares/validateAuth.js";
+import { schemaValidator } from "../middlewares/schemaValidator.js";
+import userSchema from "../schemas/userSchema.js";
+import loginSchema from "../schemas/loginSchema.js";
 import {
   handleLogin,
   handleLogout,
@@ -9,8 +11,8 @@ import {
 
 const router = Router();
 
-router.post("/signin", validateLogin, handleLogin);
-router.post("/signup", validateNewUser, postUser);
+router.post("/signin", schemaValidator(loginSchema), handleLogin);
+router.post("/signup", schemaValidator(userSchema), postUser);
 router.post("/logout", handleLogout);
 router.get("/refresh", handleRefreshToken);
 export default router;
