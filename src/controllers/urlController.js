@@ -6,8 +6,8 @@ import {
 
 export const postShorten = async (req, res) => {
   try {
-    await shortenUrl(res.locals.user.id, req.body.url);
-    return res.sendStatus(201);
+    const result = await shortenUrl(res.locals.user.id, req.body.url);
+    return res.status(201).json({ id: result.id, shortUrl: result.shortUrl });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal server error" });

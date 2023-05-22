@@ -11,7 +11,7 @@ const verifyJWT = (req, res, next) => {
     token,
     ATK,
     /* process.env.ACCESS_TOKEN_SECRET */ (err, decoded) => {
-      if (err) return res.sendStatus(403); //invalid token
+      if (err) return res.sendStatus(401); //invalid token Change to 403 after hub
       res.locals.user = {
         id: decoded.UserInfo.id,
         email: decoded.UserInfo.email,
