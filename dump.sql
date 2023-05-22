@@ -20,6 +20,9 @@ SET default_table_access_method = heap;
 --
 -- Name: urls; Type: TABLE; Schema: public; Owner: -
 --
+
+CREATE USER shortlydbuser WITH PASSWORD 'senha_ultra_secreta_do_usuario_shortlydbuser';
+
 CREATE TABLE public.urls (
     id integer NOT NULL,
     "shortUrl" character varying NOT NULL,
