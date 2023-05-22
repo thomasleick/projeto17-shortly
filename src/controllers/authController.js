@@ -47,6 +47,7 @@ export const handleLogin = async (req, res) => {
         name: foundUser.name,
         email: foundUser.email,
         accessToken,
+        token: accessToken //Remove after HUB NB
       });
     } else {
       return res.sendStatus(401); //unauthorized
